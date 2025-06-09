@@ -1,0 +1,125 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+typedef struct Emp {
+    char SSN[11];
+    char Name[100];
+    char Dept[50];
+    char Designation[50];
+    double Sal;
+    char PhNo[15];
+    struct Emp* next;
+    struct Emp* prev;
+} Emp;
+
+Emp* head = NULL;
+
+Emp* createEmp() {
+    Emp* newEmp = (Emp*)malloc(sizeof(Emp));
+    printf("Enter SSN: ");
+    scanf("%s", newEmp->SSN);
+    printf("Enter Name: ");
+    scanf("%s", newEmp->Name);
+    printf("Enter Dept: ");
+    scanf("%s", newEmp->Dept);
+    printf("Enter Designation: ");
+    scanf("%s", newEmp->Designation);
+    printf("Enter Sal: ");
+    scanf("%lf", &(newEmp->Sal));
+    printf("Enter PhNo: ");
+    scanf("%s", newEmp->PhNo);
+    newEmp->next = NULL;
+    newEmp->prev = NULL;
+    return newEmp;
+}
+
+void insertEnd() {
+    Emp* newEmp = createEmp();
+    if(head == NULL) {
+        head = newEmp;
+    } else {
+        Emp* temp = head;
+        while(temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newEmp;
+        newEmp->prev = temp;
+    }
+}
+
+void deleteEnd() {
+    if(head == NULL) {
+        printf("List is empty\n");
+    } else {
+        Emp* temp = head;
+        while(temp->next != NULL) {
+            temp = temp->next;
+        }
+        if(temp->prev != NULL) {
+            temp->prev->next = NULL;
+        } else {
+            head = NULL;
+        }
+        free(temp);
+    }
+}
+
+void insertFront() {
+    Emp* newEmp = createEmp();
+    if(head == NULL) {
+        head = newEmp;
+    } else {
+        newEmp->next = head;
+        head->prev = newEmp;
+        head = newEmp;
+    }
+}
+
+void deleteFront() {
+    if(head == NULL) {
+        printf("List is empty\n");
+    } else {
+        Emp* temp = head;
+        if(head->next != NULL) {
+            head->next->prev = NULL;
+            head = head->next;
+        } else {
+            head = NULL;
+        }
+        free(temp);
+    }
+}
+
+void display() {
+    if(head == NULL) {
+        printf("List is empty\n");
+    } else {
+        Emp* temp = head;
+        int count = 0;
+        while(temp != NULL) {
+            printf("SSN: %s, Name: %s, Dept: %s, Designation: %s, Sal: %.2lf, PhNo: %s\n", temp->SSN, temp->Name, temp->Dept, temp->Designation, temp->Sal, temp->PhNo);
+            temp = temp->next;
+            count++;
+        }
+        printf("Total Emps: %d\n", count);
+    }
+}
+
+int main() {
+    int choice;
+    do {
+        printf("1. Insert End\n2. Delete End\n3. Insert Front\n4. Delete Front\n5. Display\n6. Exit\nEnter your choice: ");
+        scanf("%d", &choice);
+        switch(choice) {
+            case 1: insertEnd(); break;
+            case 2: deleteEnd(); break;
+            case 3: insertFront(); break;
+            case 4: deleteFront(); break;
+            case 5: display(); break;
+            case 6: printf("Exiting...\n"); break;
+            default: printf("Invalid choice\n");
+        }
+    } while(choice != 6);
+    return 0;
+}
